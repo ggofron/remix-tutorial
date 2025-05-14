@@ -2,7 +2,13 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi, afterEach } from "vitest";
 import { LenderDetailsForm } from "../lender";
 import { initialLenderData } from "../types/lender.types";
-import * as verifyDuplicateLenderModule from "../hooks/useVerifyDuplicateLender";
+
+// Mock the useVerifyDuplicateLender hook directly
+vi.mock("../hooks/useVerifyDuplicateLender", () => ({
+  useVerifyDuplicateLender: () => ({
+    verifyDuplicateLender: vi.fn()
+  })
+}));
 
 describe("PDE LenderDetailsForm Component", () => {
   const mockOnInputChange = vi.fn();
@@ -189,6 +195,8 @@ describe("Duplicate lender verification", () => {
   const mockOnEmailChange = vi.fn();
   const mockOnStatusChange = vi.fn();
   const mockOnVerifyDuplicateLender = vi.fn();
+  
+  // Get access to the mocked function
   const mockVerifyDuplicate = vi.fn();
   
   const mockRenderRequiredLabel = (label: string) => {
@@ -213,13 +221,14 @@ describe("Duplicate lender verification", () => {
   
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(verifyDuplicateLenderModule, 'useVerifyDuplicateLender').mockReturnValue({
+    // Update the mock implementation for this test suite
+    vi.mocked(vi.requireMock("../hooks/useVerifyDuplicateLender").useVerifyDuplicateLender).mockReturnValue({
       verifyDuplicateLender: mockVerifyDuplicate
     });
   });
   
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
   
   test("calls verifyDuplicateLender with same value for both parameters when useParentAsLender is true", () => {
