@@ -2,10 +2,16 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { LenderDetailsForm } from "../lender";
 import { initialLenderData } from "../types/lender.types";
-import * as useVerifyDuplicateLenderModule from "../hooks/useVerifyDuplicateLender";
 
-// Mock the module directly
-vi.mock("../hooks/useVerifyDuplicateLender");
+// Create a direct mock of the verification function
+const mockVerifyDuplicateLender = vi.fn();
+
+// Mock the entire module
+vi.mock("../hooks/useVerifyDuplicateLender", () => ({
+  useVerifyDuplicateLender: () => ({
+    verifyDuplicateLender: mockVerifyDuplicateLender
+  })
+}));
 
 describe("PDE LenderDetailsForm Component", () => {
   const mockOnInputChange = vi.fn();
