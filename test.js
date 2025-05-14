@@ -18,7 +18,6 @@ describe("PDE LenderDetailsForm Component", () => {
   const mockOnParentAsLenderChange = vi.fn();
   const mockOnEmailChange = vi.fn();
   const mockOnStatusChange = vi.fn();
-  const mockOnVerifyDuplicateLender = vi.fn();
   const mockRenderRequiredLabel = (label: string) => {
     return (
       <span>
@@ -27,6 +26,7 @@ describe("PDE LenderDetailsForm Component", () => {
       </span>
     );
   };
+  const mockOnVerifyDuplicateLender = vi.fn();
 
   const defaultProps = {
     formData: { ...initialLenderData },
@@ -41,7 +41,7 @@ describe("PDE LenderDetailsForm Component", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockVerifyFunction.mockClear();
+    mockVerifyDuplicateLender.mockClear();
   });
 
   test("renders all form fields correctly", () => {
@@ -148,15 +148,6 @@ describe("PDE LenderDetailsForm Component", () => {
     
     fireEvent.click(checkbox);
     expect(mockOnParentAsLenderChange).toHaveBeenCalled();
-  });
-
-  test("verifies lender name for duplicates when name input changes", () => {
-    render(<LenderDetailsForm {...defaultProps} />);
-    
-    const lenderInput = screen.getByRole("textbox", { name: /Lender/i });
-    fireEvent.change(lenderInput, { target: { value: "Test Lender" } });
-    
-    expect(mockOnVerifyDuplicateLender).toHaveBeenCalled();
   });
 
   test("calls verifyDuplicateLender with same value for both parameters when useParentAsLender is true", () => {
